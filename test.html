@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>1111</title>
+    <style>
+       @font-face {
+            font-family: Aldrich regular;
+            src: url("source/font/Aldrich regular.ttf");
+        }
+
+        /*#text {
+            font-family: Aldrich regular;
+        }*/
+    </style>
+</head>
+<body>
+<button id="playAudio" type="button">播放声音</button>
+<button id="pauseAudio" type="button">暂停声音</button>
+<button id="stopAudio" type="button">停止声音</button>
+<button id="loopAudio" type="button">循环声音</button>
+
+<h2 id="text1">Aldrich regular</h2>
+<h2 id = "text2">Aldrich regular</h2>
+</body>
+
+<script src="library/webfont.js"></script>
+<script src="all.js"></script>
+<script type="text/javascript">
+    var spriteFile = "sound/audioSprites";
+    var spriteSetup = {
+        "BGS00": [161, 288,false,false],
+        "BGS01": [ 1389, 697,false,false],
+        "BGS02": [3012, 707,false,false],
+        "BGS03": [4675, 480,false,false],
+        "BGS04": [6100, 363,false,false],
+        "BGS05": [7414, 1137,true,true],
+        "BGS06": [9502, 1036,true,true],
+        "BGS07": [11483, 3179, true,true],
+        "BGS08": [15612, 2668,true,true],
+        "BGS09": [19246, 6666,true,true],
+        "BGS10": [26868, 30057,true,true],
+        "BGS11": [57907, 5271,true,true],
+        "BGS12": [64149, 2906,true,true],
+        "BGS13": [68015, 3947,true,true],
+        "BGS14": [72938, 1925,true,true]
+    }
+
+    var fontSetup = {
+        "Aclonica regular":"font/Aclonica regular.ttf",
+        "Aldrich regular":"font/Aldrich regular.ttf"
+    }
+    window.onload = function() {
+        window.sound = new Howl({
+            urls: ['source/sound/audioSprites.mp3', 'source/sound/audioSprites.ogg'],
+            sprite: {
+                BGS00: [161, 288],
+                BGS07: [11483, 3179,true],
+                BGS08: [15612, 2668]
+            }
+        });
+        window.sound.on("end",function(e) {
+            console.log(e);
+        })
+
+        /*var font = new GDK.Font();
+        //font.addFont("font/Aldrich regular.ttf","Aldrich regular");
+        font.addFonts(fontSetup);*/
+
+
+    }
+
+    /*
+     * @author lyh
+     * 日期 14-5-6 下午3:08
+     * 功能描述 声音管理类
+     * @param {num} 参数1说明
+     * @return {num} 返回值说明
+     * */
+
+    this.GDK = this.GDK || {};
+
+    (function () {
+        var Audio = function() {
+
+        };
+
+        var am = Audio.prototype;
+        am.howl = {};
+        am.soundMap = {};
+
+        //加载声音并创建声音
+        am.addSounds = function (spriteFile, spriteSetup) {
+            for (var i in spriteSetup) {
+                var sound = {};
+                sound.state = "end";
+                sound.soundInstance = null;
+                sound.soundName = i;
+                sound.requestResume = spriteSetup[3];
+                am.soundMap[i] = sound;
+            }
+            am.howl = new Howl({
+                urls: [spriteFile + '.mp3', spriteFile + '.ogg'],
+                sprite: spriteSetup,
+                onload: function () {
+                    console.log("加载完毕");
+                },
+                onloaderror: function () {
+                    console.log("加载错误")
+                },
+                onend: function (soundInstance) {
+                    for (var i in am.soundMap) {
+                        if (am.soundMap[i].soundInstance = soundInstance) {
+                            am.soundMap[i].state = "end";
+                        }
+                    }
+                }
+            })
+
+        };
+
+        am.play = function (key) {
+            am.howl.stop(key);
+            am.soundMap[key].soundInstance = am.howl.play(key);
+            am.soundMap[key].state = "playing";
+        };
+
+        am.pause = function (key) {
+            am.howl.pause(key);
+            am.soundMap[key].state = "suspend";
+        };
+
+        am.stop = function (key) {
+            am.howl.stop(key);
+            am.soundMap[key].state = "end";
+        };
+
+        //根据定制状态和要求恢复应该恢复的声音
+        am.resumeAudio = function () {
+            for (var i in am.soundMap) {
+                if (this.soundMap[i].state == "suspend" && this.soundMap[i].requestResume) {
+                    this.soundMap[i].soundInstance = am.play(this.audioMap[i].soundName);
+                }
+            }
+        };
+
+        //停止所有声音的播放
+        am.stopAllSound = function () {
+            for (var i in am.soundMap) {
+                if (am.soundMap[i].soundInstance) {
+                    am.stop(i);
+                }
+            }
+        };
+
+        GDK.Audio = Audio;
+
+
+        /*
+        * @author yuhang.liu
+        * @CreateTime 14-10-16
+        * 功能描述 字体加载类，提供单个字体加载和多个字体加载两种方式
+        * @param {num} 参数1说明
+        * @return {num} 返回值说明
+        * */
+        var Font = function() {
+
+        }
+
+        var f = Font.prototype;
+
+        //加载字体文件
+        f.addFont = function(fontPath,fontName) {
+            var styleNode = document.createElement("style");
+            styleNode.type = "text/css";
+            var styletext = "@font-face {\n";
+            styletext += "  font-family: " + fontName + ";\n";
+            styletext += "  src: url('" + fontPath + "');\n";
+            styletext += "}";
+            styleNode.innerHTML = styletext;
+            document.body.appendChild(styleNode);
+
+            WebFontConfig = {
+                custom: {
+                    families: [fontName]
+                },
+                loading: function() {
+                    console.log("加载成功");
+                },
+                //
+                active: function() {
+                    console.log("渲染成功");
+                },
+                inactive: function() {
+                    console.log("不支持");
+                }
+            };
+
+            WebFont.load(WebFontConfig);
+
+        }
+
+        //根据配置加载多个字体文件
+        f.addFonts = function(fontSetup) {
+            var styleNode = document.createElement("style");
+            styleNode.type = "text/css";
+            var styletext = "";
+            var fontNameArr = [];
+            for(var key in fontSetup) {
+                fontNameArr.push(key);
+                styletext += "@font-face {\n";
+                styletext += "  font-family: " + key + ";\n";
+                styletext += "  src: url('" + fontSetup[key] + "');\n";
+                styletext += "}\n";
+            }
+            styleNode.innerHTML = styletext;
+            document.body.appendChild(styleNode);
+
+            WebFontConfig = {
+                custom: {
+                    families: fontNameArr
+                },
+                //所有字体加载成功触发此事件
+                loading: function() {
+                    console.log("所有字体加载成功");
+                },
+                //所有字体渲染成功触发此事件
+                active: function() {
+                    console.log("所有字体渲染成功");
+                },
+                //如果浏览器不支持连接式加载字体触发此事件或者没有任何字体被加载触发此事件
+                inactive: function() {
+                    console.log("不支持");
+                },
+                //加载成功一次触发一次此事件
+                fontloading:function(fontName,fvd) {
+                    console.log(fontName);
+                    console.log(fvd);
+                },
+                //渲染成功一个字体触发一次此事件
+                fontactive:function(fontName,fvd) {
+                    console.log(fontName);
+                    console.log(fvd);
+                },
+                //当某一个字体不能被读取时触发此事件
+                fontinactive:function(fontName,fvd) {
+                    console.log(fontName);
+                    console.log(fvd);
+                }
+            };
+
+            WebFont.load(WebFontConfig);
+
+        }
+
+
+        GDK.Font = Font;
+
+    }());
+
+
+
+    document.getElementById("playAudio").addEventListener("click",function() {
+        sound.play('BGS07');
+    });
+    document.getElementById("pauseAudio").addEventListener("click",function() {
+        sound.pause('BGS07');
+    });
+    document.getElementById("stopAudio").addEventListener("click",function() {
+        sound.stop('BGS07');
+    });
+
+
+</script>
+</html>
