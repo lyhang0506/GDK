@@ -1,0 +1,10 @@
+#game {
+    position:absolute;
+    text-align: center;
+    left: 50%;
+    top: 50%;
+}
+
+* {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}

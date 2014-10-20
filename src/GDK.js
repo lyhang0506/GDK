@@ -511,8 +511,7 @@
        }
        ua = _ua;
    }(win));
-    console.dir(ua());
-   
+
     /*
     * author will.jiang
     * 日期 14-4-23 上午10:52
@@ -1115,73 +1114,6 @@
 
         }
     })
-
-   /*
-   * @author yuhang.liu
-   * @CreateTime 14-9-24
-   * 功能描述 声音管理类，管理声音的各种操作
-   * @param {num} 参数1说明
-   * @return {num} 返回值说明
-   * */
-
-    G.audio.date = new Date();
-    G.audio.soundMap = {};
-
-    G.audio.play = function (soundId) {
-        var self = self;
-        console.dir(self.soundMap[soundId].pauseState);
-        self.soundMap[soundId].startPlayTime = self.date.getTime();
-        if(self.soundMap[soundId].pauseState) {
-            self.soundMap[soundId].play();
-            self.soundMap[soundId].timeoutId = setTimeout(function () {
-                self.soundMap[soundId].pauseState = false;
-                self.soundMap[soundId].currentTime = self.soundMap[soundId].startTime;
-                self.stop(soundId);
-            }, self.soundMap[soundId].length - self.soundMap[soundId].playedTime);
-        }else {
-            self.soundMap[soundId].currentTime = self.soundMap[soundId].startTime/1000;
-            self.soundMap[soundId].play();
-            self.soundMap[soundId].timeoutId = setTimeout(function () {
-                self.stop(soundId);
-            }, self.soundMap[soundId].length);
-        }
-    };
-
-    G.audio.loop = function (soundId) {
-        var self = self;
-        console.dir(self.soundMap[soundId].pauseState);
-        self.soundMap[soundId].startPlayTime = self.date.getTime();
-        if(self.soundMap[soundId].pauseState) {
-            self.soundMap[soundId].play();
-            self.soundMap[soundId].timeoutId = setTimeout(function () {
-                self.soundMap[soundId].pauseState = false;
-                self.soundMap[soundId].currentTime = self.soundMap[soundId].startTime;
-                self.loop(soundId);
-            }, self.soundMap[soundId].length - self.soundMap[soundId].playedTime);
-        }else {
-            self.soundMap[soundId].currentTime = self.soundMap[soundId].startTime/1000;
-            self.soundMap[soundId].play();
-            self.soundMap[soundId].timeoutId = setTimeout(function () {
-                self.loop(soundId);
-            }, self.soundMap[soundId].length);
-        }
-    };
-
-    G.audio.pause = function (soundId) {
-        var self = this;
-        clearTimeout(self.soundMap[soundId].timeoutId);
-        self.soundMap[soundId].playedTime = (self.date.getTime() - self.soundMap[soundId].startPlayTime())/1000;
-        self.soundMap[soundId].pause();
-        self.soundMap[soundId].pauseState = true;
-    };
-
-    G.audio.stop = function (soundId) {
-        var self = this;
-        clearTimeout(self.soundMap[soundId].timeoutId);
-        self.soundMap[soundId].pause();
-        self.soundMap[soundId].pauseState = false;
-        self.soundMap[soundId].currentTime = self.soundMap[soundId].start;
-    };
 
     /*
     * @author will.jiang
