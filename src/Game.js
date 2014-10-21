@@ -1,3 +1,8 @@
+/**
+ * Created by will.jiang on 14-10-21.
+ * 国际化工具
+ * require Check.js
+ */
 /*
 * @author yuhang.liu
 * @CreateTime 14-10-20
@@ -52,7 +57,7 @@ this.GDK = this.GDK || {};
         st['ms' + cap_prop] = val;
         st['Moz' + cap_prop] = val;
         st['Webkit' + cap_prop] = val;
-        g._makeStyle(st);
+        g._makeStyle(st);6
     }
 
     //设置装canvas的div的宽和高
@@ -86,4 +91,77 @@ this.GDK = this.GDK || {};
 
 
     GDK.Game = Game;
+}());
+
+
+
+/*
+ * @author will.jiang
+ * 日期 14-4-29 下午4:08
+ * 功能描述
+ * @param el{DOM} 传入canvas外部的一层元素，该元素控制canvas的整体缩放和自动居中
+ * @param protectW{int}  受保护的显示面积的宽
+ * @param protectH{int}  受保护的显示面的高
+ * @return null
+ * */
+var autoResize = JClass.extend({
+    init:function(el,protectW,protectH){
+        this.el = el||document.getElementById("gameWrap");
+        this.prtW =protectW||1920;
+        this.prtH = protectH||1080;
+    },
+    run:function(){
+        var browScreen = document.documentElement;
+        var scaleW = browScreen.clientWidth/this.prtW;
+        var scaleH = browScreen.clientHeight/this.prtH;
+//            var rs = scaleW>scaleH?scaleH:scaleW;
+        var rs = Math.min(scaleH,scaleW);
+        var s =  this.setPrefixed("transform",rs);
+        this.setStyle(s);
+    },
+    setPrefixed:function(key,value){
+        var fix = {};
+        var list = ["-moz-","-webkit-","-o-","-ms-",""];
+        for(var i=0;i<list.length;i++){
+            fix[list[i]+key]="scale("+value+")";
+        }
+        return fix;
+    },
+    setStyle:function(S){
+        var elStyle = this.el.style;
+//            防止属性被覆盖，采用对特定样式赋值的方式
+        for(var k in S){
+            elStyle[k]=S[k];
+        }
+    }
+
+})
+
+/*
+ * @author will.jiang
+ * 日期 14-4-29 下午4:18
+ * 功能描述 自适应模块的暴露接口
+ * @param el{DOM} 传入canvas外部的一层元素，该元素控制canvas的整体缩放和自动居中
+ * @param protectW{int}  受保护的显示面积的宽
+ * @param protectH{int}  受保护的显示面的高
+ * @return {boolean} 重复调用会返回flase，并且不会执行绑定事件
+ * tips：该方法推荐在dom加载完成后处理，这是才能取得正确的屏幕高宽和自适应容器的高宽
+ * */
+G.tools.autoResize =(function(){
+    var tools = null ;
+    var timer = null;
+    return function(el,protectW,protectH){
+        //阻止重复绑定事件
+        if(tools)return false;
+        tools = new autoResize(el,protectW,protectH);
+        //绑定窗口resize事件
+        addEvent(win,'resize',function(){
+            clearTimeout(timer);
+            timer = setTimeout(function(){
+                tools.run();
+            },200)
+        });
+        //初始化调用事件
+        tools.run();
+    }
 }());
