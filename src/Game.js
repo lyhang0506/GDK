@@ -63,8 +63,8 @@ this.GDK = this.GDK || {};
     //设置装canvas的div的宽和高
     //设置canvas的宽和高
     g._setStyle = function() {
-        g.gameEle.style.height = g.settings.bgHeight;
-        g.gameEle.style.width = g.settings.bgWidth;
+        g.gameEle.style.height = g.settings.bgHeight+'px';
+        g.gameEle.style.width = g.settings.bgWidth+'px';
         g.gameEle.style.background = "url(" + g.settings.gameBGUrl + ") no-repeat";
         g.gameEle.style.margin = "-"+(g.settings.bgHeight/2)+"px"+" 0px 0px "+"-"+(g.settings.bgWidth/2)+"px";
         g.canvas.height = g.settings.canvasHeight;
