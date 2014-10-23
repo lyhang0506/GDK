@@ -9,7 +9,7 @@ var G = {
     check: {},//检查的方法类
     tools: {},//工具类
     locale: {},//国际化
-    audio: {}//声音管理类
+    audio: null//声音管理类
 };
 //空方法
 var $empty = function(){};

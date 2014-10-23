@@ -21,18 +21,24 @@ this.GDK = this.GDK || {};
 
     g.gameEle = document.getElementById("game");
     g.canvas = document.getElementById("canvas");
+    g.stage = new createjs.Stage(g.canvas);
     g.supportMobile = false;
     g.settings = {};
 
     g.init = function(){
+        createjs.Ticker.setFPS(60);
+        createjs.Ticker.addEventListener("tick", g.stage);
+        g.stage.addChild(new createjs.Bitmap("source/images/desktop/machine.png"));
         if(arguments.length==2) {
             g.supportMobile = true;
         }else {
             g.supportMobile = false;
         }
         if(GDK.check.isDesktop()) {
+            g.stage.mouseEventsEnabled = true;
             g.settings = arguments[0];
         }else{
+            createjs.Touch.enable(stage);
             g.settings = arguments[1];
         }
         g._setStyle();
@@ -57,7 +63,7 @@ this.GDK = this.GDK || {};
         st['ms' + cap_prop] = val;
         st['Moz' + cap_prop] = val;
         st['Webkit' + cap_prop] = val;
-        g._makeStyle(st);6
+        g._makeStyle(st);
     }
 
     //设置装canvas的div的宽和高
@@ -79,7 +85,9 @@ this.GDK = this.GDK || {};
         height = g.settings.gameMinHeight;
         var scaleW = GDK.check.availWidth() / width
         var scaleH = GDK.check.availHeight() / height
-        var toScale = Math.min(1, 1);
+        console.log(GDK.check.availWidth());
+        console.log(GDK.check.availHeight());
+        var toScale = Math.min(scaleW, scaleH);
         g._setPrefixed('transform','scale(' + toScale + ')');
     }
 
@@ -87,7 +95,7 @@ this.GDK = this.GDK || {};
     //改变游戏窗口大小的回调函数，目前只支持横屏
     g._resizeCallback = function () {
         g._landscapeResizeCallback();
-    }
+    };
 
 
     GDK.Game = Game;

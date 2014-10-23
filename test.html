@@ -6,8 +6,10 @@
     <link rel="stylesheet" type="text/css" href="css/base.css"/>
 </head>
 <body>
-<div id="game">
-    <canvas id="canvas"></canvas>
+<div id = "gameContainer">
+    <div id="game">
+        <canvas id="canvas"></canvas>
+    </div>
 </div>
 </body>
 <script src="src/createjs.js"></script>
@@ -27,7 +29,7 @@
             canvasWidth:1920,
             gameMinHeight:1000,
             gameMinWidth:1300,
-            gameBGUrl:"source/images/loading.jpg"
+            gameBGUrl:"source/images/desktop/background.jpg"
         };
         console.log(game);
         game.init(deskSettings);

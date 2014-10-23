@@ -964,41 +964,7 @@
             this._setLoaderList(list,basePath,this.css);
             return this;
         },
-        /*
-         * @author will.jiang
-         * 日期 14-5-6 下午3:08
-         * 功能描述 加载单个字体文件
-         * assetLoader.addFont("arial", "fonts/Arial.ttf");
-         * @param {num} 参数1说明
-         * @return {num} 返回值说明
-         * */
-        addFont:function(item){
-            if(item.name&&item.url) this.fonts.push(item);
-            return this;
-        },
-        /*
-         * @author will.jiang
-         * 日期 14-5-6 下午3:08
-         * 功能描述 加载字体列表
-         * var fontAssets = [
-         { name: "arial", url: "fonts/Arial.ttf" },
-         { name: "ptsans", url: "fonts/PTSans.ttf" }
-         ];
-         assetLoader.addFonts(fontAssets);
-         * @param {name:string,url:string} name:字体的名字; url:字体的加载路径
-         * @param {string} 基本的路径地址
-         * @return {num} 返回值说明
-         * */
-        addFonts:function(list,basePath){
-            var that = this;
-            if(list instanceof  Array){
-                list.forEach(function(item){
-                    if(basePath)item.url = basePath+item.url;
-                    that.fonts.push(item);
-                })
-            }
-            return this;
-        },
+
         /*
          * @author will.jiang
          * 日期 14-5-6 下午3:08
@@ -1019,10 +985,10 @@
          * @param {num} 参数1说明
          * @return {num} 返回值说明
          * */
-        start:function(){
+        start:function(onSuccess,onFail){
             //这里是主要的加载逻辑点,IE9+的浏览器都支持DOM2事件，so可以直接使用addEventListenner
             //先统计总的加载数量
-            var that = this;
+            var self = this;
             //字体文件并没加载成功或失败的规范事件，所以对字体不进行加载判定
             this.count = this.images.length+this.css.length+this.sounds.length;
             var onSuccess = this.onSuccess||function(){
@@ -1033,7 +999,7 @@
             };
             function checkCount(){
                 //如果全部加载完了
-                if(that.count ==++that.loadedNum){
+                if(self.count ==++self.loadedNum){
                     onSuccess();
                 }
             }
@@ -1082,36 +1048,75 @@
 
             //加载字体
             function $loadFont(fonts){
-                //这里只动态加载需要的字体文件，不绑定事件
-                fonts.forEach(function(item,i){
+                var styleNode = document.createElement("style");
+                styleNode.type = "text/css";
+                var styletext = "";
+                for (var i =0;i<fonts.length;i++) {
+                    styletext += "@font-face {\n";
+                    styletext += "  font-family: " + fonts[i] + ";\n";
+                    styletext += "  src: url('" + self.mainPath+"/font/"+fonts[i] + ".ttf');\n";
+                    styletext += "}\n";
+                }
+                styleNode.innerHTML = styletext;
+                document.body.appendChild(styleNode);
+                var WebFontConfig = {};
+                if(fonts.length == 1) {
+                    WebFontConfig = {
+                        custom: {
+                            families: fonts[0]
+                        },
+                        //所有字体加载成功触发此事件
+                        loading: function () {
+                            console.log("所有字体加载成功");
+                        },
+                        //所有字体渲染成功触发此事件
+                        active: function () {
+                            console.log("所有字体渲染成功");
+                        },
+                        //如果浏览器不支持连接式加载字体触发此事件或者没有任何字体被加载触发此事件
+                        inactive: function () {
+                            console.log("不支持");
+                        }
+                    };
+                }else{
+                    WebFontConfig = {
+                        custom: {
+                            families: fonts
+                        },
+                        //所有字体加载成功触发此事件
+                        loading: function () {
+                            console.log("所有字体加载成功");
+                        },
+                        //所有字体渲染成功触发此事件
+                        active: function () {
+                            console.log("所有字体渲染成功");
+                        },
+                        //如果浏览器不支持连接式加载字体触发此事件或者没有任何字体被加载触发此事件
+                        inactive: function () {
+                            console.log("不支持");
+                        },
+                        //加载成功一次触发一次此事件
+                        fontloading: function (fontName, fvd) {
+                            console.log(fontName);
+                            console.log(fvd);
+                        },
+                        //渲染成功一个字体触发一次此事件
+                        fontactive: function (fontName, fvd) {
+                            console.log(fontName);
+                            console.log(fvd);
+                        },
+                        //当某一个字体不能被读取时触发此事件
+                        fontinactive: function (fontName, fvd) {
+                            console.log(fontName);
+                            console.log(fvd);
+                        }
+                    };
 
-                });
+                }
+                WebFont.load(WebFontConfig);
             };
+
             //加载声音
-            /*function $loadSound(sounds){
-                var type = new Audio();
-                type = type.canPlayType('video/ogg')?"ogg":"mp3";
-                sounds.forEach(function(item){
-                    var sound = new Audio();
-                    //拼凑音频文件路径
-                    sound.src = item+"."+type;
-                    sound.addEventListener("canplaythrough", function () {
-                        //加载成功!
-                        checkCount();
-                    }, false);
-                    sound.addEventListener("error", function () {
-                        onFail(this.src);
-                    }, false);
-                });
-            };*/
-
-
-            //
-            /*
-             * 需要方法分别加载3种类型，然后加载成功执行回调方法，记录加载总数的变量++，并且同加载总数
-             * 相比较，如果相等表明全部加载成功，这时执行设定的方法
-             * */
-
         }
     })
 

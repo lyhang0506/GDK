@@ -17,8 +17,10 @@ this.GDK = this.GDK || {};
     am.howl = {};
     am.soundMap = {};
 
-    //加载声音并创建声音
-    am.addSounds = function (spriteFile, spriteSetup) {
+    //配置声音
+    am._addSounds = function (spriteFile, spriteSetup) {
+        am.spriteFile = spriteFile;
+        am.spriteSetup = spriteSetup;
         for (var i in spriteSetup) {
             var sound = {};
             sound.state = "end";
@@ -27,9 +29,12 @@ this.GDK = this.GDK || {};
             sound.requestResume = spriteSetup[3];
             am.soundMap[i] = sound;
         }
+    };
+    //加载声音
+    am._loadSounds = function() {
         am.howl = new Howl({
-            urls: [spriteFile + '.mp3', spriteFile + '.ogg'],
-            sprite: spriteSetup,
+            urls: [am.spriteFile + '.mp3', am.spriteFile + '.ogg'],
+            sprite: am.spriteSetup,
             onload: function () {
                 console.log("加载完毕");
             },
@@ -44,7 +49,6 @@ this.GDK = this.GDK || {};
                 }
             }
         })
-
     };
 
     am.play = function (key) {

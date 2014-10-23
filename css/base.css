@@ -1,8 +1,19 @@
 #game {
-    position:absolute;
+    position: absolute;
     text-align: center;
     left: 50%;
     top: 50%;
+}
+html,body{
+    padding: 0;
+    margin: 0;
+}
+#gameContainer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
 }
 
 * {
