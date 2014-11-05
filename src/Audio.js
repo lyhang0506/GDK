@@ -18,6 +18,14 @@ this.GDK = this.GDK || {};
     am.soundMap = {};
 
     //配置声音
+    /*
+    * @author animal
+    * 日期 2014 11 05 上午9:21
+    * 功能描述
+    * @param {string} 不带后缀的声音精灵文件名
+    * @param {object} 声音配置
+    * @return none
+    * */
     am._addSounds = function (spriteFile, spriteSetup) {
         am.spriteFile = spriteFile;
         am.spriteSetup = spriteSetup;
@@ -31,15 +39,23 @@ this.GDK = this.GDK || {};
         }
     };
     //加载声音
-    am._loadSounds = function() {
+    /*
+    *
+    * */
+
+     am._loadSounds = function(onload,onloaderror) {
         am.howl = new Howl({
             urls: [am.spriteFile + '.mp3', am.spriteFile + '.ogg'],
             sprite: am.spriteSetup,
             onload: function () {
-                console.log("加载完毕");
+                if(typeof onload =="function"){
+                    onload();
+                }
             },
             onloaderror: function () {
-                console.log("加载错误")
+                if(typeof onloaderror =="function"){
+                    onloaderror();
+                }
             },
             onend: function (soundInstance) {
                 for (var i in am.soundMap) {

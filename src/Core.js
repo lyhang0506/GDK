@@ -164,4 +164,4 @@ G.Map = JClass.extend({
         this.data = {};
     }
 });
-
+window.GDK = G;

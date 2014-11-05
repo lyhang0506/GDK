@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>test ajax</title>
+</head>
+<body>
+    <h2>测试ajax</h2>
+<script type="text/javascript" src="src/Ajax.js"></script>
+<script type="text/javascript">
+    var name = "will";
+    new $Ajax({
+        url:"checkName",
+        method:'post',
+        date:{name:"sss"},
+        onRequest:function(){
+            console.log("请求前的操作");
+        },
+        onSuccess:function(rsp){
+            console.log("请求成功!"+rsp);
+        },
+        onFailure:function(){
+            console.log("请求失败");
+        },
+        onTimeout:function(){
+            console.log("请求超时");
+        }
+    }).send("age=23&addr=chegndu");
+    /*
+    *
+    * 只有url是必选配置项
+    * 如下面的操作
+    * */
+    new $Ajax({
+        url:"changeCode"
+    }).send("age=23");
+
+</script>
+</body>
+</html>

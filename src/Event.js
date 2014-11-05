@@ -1,6 +1,7 @@
 /**
  * Created by will.jiang on 14-10-21.
  * 事件管理
+ * require Properties.js
  */
 
 /*
@@ -13,7 +14,7 @@
  * @return {num} 返回值说明
  * */
 var addEvent =(function(){
-    var flag = typeof win.addEventListener != "undefined";
+    var flag = typeof window.addEventListener != "undefined";
     return function(container,eventType,handle){
         if(flag){
             //支持W3C的标准
@@ -31,7 +32,7 @@ var addEvent =(function(){
  * @return {num} 返回值说明
  * */
 var removeEvent = (function(){
-    var flag = typeof win.removeEventListener !="undefined";
+    var flag = typeof window.removeEventListener !="undefined";
     return function(container,eventType,handle){
         if(flag){
             container.removeEventListener(eventType,handle,false);
@@ -53,7 +54,7 @@ var removeEvent = (function(){
 var event = JClass.extend({
     init:function(){
         //保存事件的对象,所有的事件对象都保存在里面。
-        this.events = {};
+        this.$events = {};
     },
     /*
      * @author will.jiang
@@ -66,9 +67,13 @@ var event = JClass.extend({
     addEvent:function(type,fn){
         if(typeof type == "string"){
             //第一次注册需要给这个type类型分配空间
-            var list = this.events[type];
-            if(!list) list=[];
-            if(typeof fn =="function")list.push(fn);
+            var list = this.$events[type];
+            if(!list){
+                list = this.$events[type]=[];
+            }
+            if(typeof fn =="function"){
+                list.push(fn);
+            }
         }
     },
     /*
@@ -96,7 +101,7 @@ var event = JClass.extend({
      * */
     removeEvent:function(type,fn){
         if(typeof type == "string"){
-            var list = this.events[type];
+            var list = this.$events[type];
             if(list){
                 //如果该事件被注册过
                 if(typeof fn =="function"){
@@ -123,7 +128,7 @@ var event = JClass.extend({
     removeEvents:function(obj){
         if(obj){
             var that = this;
-            var list = this.events;
+            var list = this.$events;
             for(var i in obj){
                 this.removeEvent(i,obj[i]);
             }
@@ -134,17 +139,27 @@ var event = JClass.extend({
      * 日期 14-5-7 下午4:20
      * 功能描述 触发自定义事件
      * @param {num} 参数1说明
+     * @param {array} 参数列表
      * @return {num} 返回值说明
      * */
-    fireEvent:function(type){
+    fireEvent:function(type,pram){
         if(typeof type =="string"){
-            var list = this.events[type];
+            var list = this.$events[type];
             if(list){
                 for(var i= 0,max=list.length;i<max;i++){
-                    list[i](type);
+//                    list[i](type);
+                    list[i].apply(window,pram);
                 }
             }
         }
     }
 });
-
+//事件管理机制应该是单例的。所以就直接实例化对象了
+G.Event = new event();
+//暴露一些GDK根方法
+G.on =function(){
+    G.Event.addEvent.apply(G.Event,arguments);
+};
+G.off = function(){
+    G.Event.removeEvent.apply(G.Event,arguments);
+};

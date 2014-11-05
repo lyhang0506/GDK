@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>test ajax</title>
+</head>
+<body>
+<h2>测试ajax</h2>
+<script src="library/webfont.js"></script>
+<script src="library/howler.js"></script>
+<script src="src/Audio.js"></script>
+<!--GDK资源顺序-->
+<script type="text/javascript" src="src/Core.js"></script>
+<script type="text/javascript" src="src/Properties.js"></script>
+<script type="text/javascript" src="src/Event.js"></script>
+<script type="text/javascript" src="src/AssetLoader.js"></script>
+<script type="text/javascript">
+    (function(){
+        function loadSuccess(){
+            console.log("全部加载！");
+        }
+        function loadError(){
+            console.log("加载失败！");
+        }
+        GDK.on(GDK.EVENT.LOADING_PROGRESS,function(now,count){
+            console.log("当前加载到第"+now+"个，总共"+count+"个");
+        });
+        var loader = new GDK.AssetLoader();
+        loader.loadImages(['autoPlayBG.png','autoTimeBG.png','bitmapText.png'],'source/images/desktop/').start(loadSuccess,loadError);
+
+    }());
+</script>
+</body>
+</html>
