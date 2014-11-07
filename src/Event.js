@@ -158,8 +158,10 @@ var event = JClass.extend({
 G.Event = new event();
 //暴露一些GDK根方法
 G.on =function(){
-    G.Event.addEvent.apply(G.Event,arguments);
+   var e =  G.Event;
+   e.addEvent.apply(e,arguments);
 };
 G.off = function(){
-    G.Event.removeEvent.apply(G.Event,arguments);
+    var e =  G.Event;
+    e.removeEvent.apply(e,arguments);
 };

@@ -12,7 +12,8 @@ var G = {
     audio: null//声音管理类
 };
 //空方法
-var $empty = function(){};
+var $empty = function () {
+};
 //类工厂
 (function () {
     // 当前是否处于创建类的阶段
@@ -79,41 +80,42 @@ var $empty = function(){};
 
 // 经过改造的Class
 /*var Person = JClass.extend({
-    init: function (name, addr) {
-        this.name = name;
-        this.addr = addr;
-    },
-    getName: function (prefix) {
-        return prefix + this.name;
-    }
-});
+ init: function (name, addr) {
+ this.name = name;
+ this.addr = addr;
+ },
+ getName: function (prefix) {
+ return prefix + this.name;
+ }
+ });
 
 
-var Employee = Person.extend({
-    init: function (name, employeeID, addr) {
-        //  调用父类的方法
-        this._super(name, addr);
-        this.employeeID = employeeID;
-    },
-    getEmployeeIDName: function () {
-        // 注意：我们还可以通过这种方式调用父类中的其他函数
-        var name = this._superprototype.getName.call(this, "Employee name: ");
-        return name + ", Employee ID: " + this.employeeID;
-    },
-    getName: function () {
-        //  调用父类的getName方法
-        return this._super("Employee name: ");
-    },
-    getAddr: function () {
-        return this.addr;
-    }
-});*/
+ var Employee = Person.extend({
+ init: function (name, employeeID, addr) {
+ //  调用父类的方法
+ this._super(name, addr);
+ this.employeeID = employeeID;
+ },
+ getEmployeeIDName: function () {
+ // 注意：我们还可以通过这种方式调用父类中的其他函数
+ var name = this._superprototype.getName.call(this, "Employee name: ");
+ return name + ", Employee ID: " + this.employeeID;
+ },
+ getName: function () {
+ //  调用父类的getName方法
+ return this._super("Employee name: ");
+ },
+ getAddr: function () {
+ return this.addr;
+ }
+ });*/
 
 /*
  * 继承的实现
  * */
-function extend(child,parent){
-    var F =function(){ };
+function extend(child, parent) {
+    var F = function () {
+    };
     F.prototype = parent.prototype;
     child.prototype = new F();
     //构造函数的指向修正
@@ -128,40 +130,89 @@ function extend(child,parent){
  * @return {num} 拷贝后的子类
  * */
 function deepCopy(p, c) {
-    var c = c||{};
-    for(var i in p){
-        if(typeof p[i] === "object"){
-            c[i] = (p[i].constructor == Array)?[]:{};
-            deepCopy(p[i],c[i]);
-        }else{
+    var c = c || {};
+    for (var i in p) {
+        if (typeof p[i] === "object") {
+            c[i] = (p[i].constructor == Array) ? [] : {};
+            deepCopy(p[i], c[i]);
+        } else {
             c[i] = p[i];
         }
     }
     return c
 }
-
-
-
+//扩展foreach&filter
+if (typeof Array.prototype.forEach == "undefined") {
+    Array.prototype.forEach = function (fn) {
+        for (var i = 0; i < this.length; i++) {
+            fn(this[i], i);
+        }
+    }
+}
+/*
+ [14.34].filter(function(el,i){
+ return el>3;
+ })
+ */
+if (typeof Array.prototype.filter == "undefined") {
+    Array.prototype.filter = function (fn) {
+        var rs = [];
+        for (var i = 0; i < this.length; i++) {
+            var item = this[i];
+            if (fn(item, i)) {
+                rs.push(item);
+            }
+        }
+        return rs;
+    }
+}
 //扩展一个hashmap对象
-G.Map = function(){this.data={}};
+G.Map = function () {
+    this.data = {}
+};
 G.Map = JClass.extend({
-    init:function(){
-        this.data={};
+    init: function () {
+        this.data = {};
     },
-    set:function (key, value) {
+    set: function (key, value) {
         this.data[key] = value;
     },
-    get:function (key) {
+    get: function (key) {
         return this.data[key];
     },
-    containsKey:function (key) {
+    containsKey: function (key) {
         return (typeof this.data[key] != 'undefined')
     },
-    remove:function (key) {
+    remove: function (key) {
         delete this.data[key];
     },
-    clear:function () {
+    clear: function () {
         this.data = {};
     }
 });
+
+(function(){
+//typeof 增强 。除去typeof可以判断的boolean、number、object、function、string外还可以判断null、Array、Date、regexp
+    var $classType = {};
+    var $types = "Boolean Number String Function Array Date RegExpObject".split(" ");
+    $types.forEach(function (item,i) {
+        $classType["[object "+item+"]"]= item.toLowerCase();
+    });
+    /*
+     * @author will.jiang
+     * 日期 2014 11 06 下午4:18
+     * 功能描述 校验数据类型。可以判断多种数据类型
+     * @param {num} 参数1说明
+     * @return {num} 返回值说明
+     * */
+    G.type=function(obj){
+        if(obj==null){
+            return "null"
+        }else{
+            return $classType[toString.call(obj)]||'object';
+        }
+    };
+}());
+
+
 window.GDK = G;

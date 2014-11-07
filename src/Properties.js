@@ -1,6 +1,6 @@
 /**
  * Created by will.jiang on 14-10-24.
- * 常亮索引
+ * 索引
  */
 /*
  * 系统级事件定义。只是key的作用。如果需要
@@ -15,6 +15,3 @@ G.EVENT={
     SETTING_CHANGED:"SETTING_CHANGED",
     SOUND_ENDED:"SOUND_ENDED"
 };
-
-
-var list =['LOADING_PROGRESS','SUSPEND_GAME']
