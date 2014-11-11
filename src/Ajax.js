@@ -46,7 +46,7 @@
         //20S超时
         this.timeout = 20000;
         //是否是异步请求
-        this.async = cfg.async || true;
+        this.async = !!cfg.async;
     };
 //扩充原型链
     $Ajax.prototype = {
