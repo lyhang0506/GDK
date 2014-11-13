@@ -141,6 +141,7 @@ function deepCopy(p, c) {
     }
     return c
 }
+G.deepCopy = deepCopy;
 //扩展foreach&filter
 if (typeof Array.prototype.forEach == "undefined") {
     Array.prototype.forEach = function (fn) {
@@ -149,6 +150,20 @@ if (typeof Array.prototype.forEach == "undefined") {
         }
     }
 }
+/*
+* @author will.jiang
+* 日期 2014 11 13 上午10:41
+* 功能描述 把子类内容扩展到父类上
+* @param p{obj} 父类
+* @param c{obj} 子类
+* @return {num} 返回值说明
+* */
+G.combin=function(p,c){
+    var o = c||{};
+    for(var i in o){
+         p[i] = o[i];
+    }
+};
 /*
  [14.34].filter(function(el,i){
  return el>3;

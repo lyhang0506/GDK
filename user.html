@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>user类设计</title>
+</head>
+<body>
+<script type="text/javascript" src="src/Core.js"></script>
+<script type="text/javascript">
+    function User(){
+        if(this instanceof User){
+            return this.init.apply(this,Array.prototype.slice.call(arguments));
+        }else{
+            return new User();
+        }
+    }
+    User.prototype={
+        init:function(config){
+            var cfg = config||{};
+            this.name = cfg.name||"user1";//姓名
+            this.clothing = cfg.clothing||"1";//服装类型。也就代表了不同的人物模型
+            this.power = cfg.power||15;//体力值
+            this.salary = cfg.salary||20;//年薪
+            this.job = 'Write';//当前的工作。
+            var jobs = {
+                'Write':0,//作家
+                'Coder':0,//程序
+                'Comic':0,//原画
+                'Snd.Eng':0,//音乐，
+                'Director':0,//前面内容5级后出现总监
+                'Producer':0,//5级后出现 制作人
+                'Had.Eng':0,//5级后出现 硬件工程师
+                'hacker':0//5级后出现 硬件工程师黑客
+            };
+            GDK.combin(jobs,cfg.jobs||{});
+            //自动拼合每个人员的工作情况。传入的jobs对象可以只有部分类容比如{Coder:3}
+            this.jobs = jobs;
+            this.skills = cfg.skills||[1,1,1,1];//对应4个技能的指标 program,scenario,graphics,sound
+
+
+            this.playing = null;//记录动画索引。用于清除
+        },
+        //清除所有动画
+        stop:function(){
+            //得到索引进行清除操作
+            var playing = this.playing;
+            //...
+        },
+        /*
+        * @author will.jiang
+        * 日期 2014 11 13 上午9:11
+        * 功能描述 走动的帧动画。
+        * @param {num} 方向 1、2、3、4 分别对应上、右、下、左
+        * @return {num} 返回值说明
+        * */
+        walk:function(direction){
+
+            if(typeof direction == 'number'){
+                //先停止前面的动画
+                this.stop();
+                switch (direction){
+                    case 1:
+                       //配置动画需要的参数等...
+                        break;
+                    case 2:
+
+                        break;
+                    case 3:
+
+                        break;
+                    case 4:
+
+                        break;
+                    default :
+
+                }
+               //完成后执行新动画
+
+               //...最后把动画的引用绑定好。每个都有这个操作，就不重复实现了。
+               //this.playing=XXX;
+
+            }
+        },
+        /*
+        * @author will.jiang
+        * 日期 2014 11 13 上午9:30
+        * 功能描述 坐在凳子上的张望动作
+        * @param {num} 参数1说明
+        * @return {num} 返回值说明
+        * */
+        look:function(){
+            this.stop();
+        },
+        /*
+        * @author will.jiang
+        * 日期 2014 11 13 上午9:37
+        * 功能描述 燃烧吧小宇宙,各种爆发
+        * @param {string} 爆发时增长的类型。如 游戏性、音乐、图像、bug、升级数据等
+        * @return {num} 返回值说明
+        * */
+        fire:function(type){
+            this.stop();
+        },
+        /*
+        * @author will.jiang
+        * 日期 2014 11 13 上午10:00
+        * 功能描述 敲代码的动作。具有方向性
+        * @param {num} 1：朝上的代码敲击 3：朝下的代码敲击
+        * @return {num} 返回值说明
+        * */
+        coding:function(direction){
+
+        }
+
+
+    }
+
+
+    var user1 = new User({
+        name:"XMan",
+        clothing:8,
+        power:40,
+        salary:300,
+        job:'Director',
+        jobs:{
+            Write:5,
+            Coder:3,
+            Director:2
+        },
+        skills:[142,143,98,88]
+    })
+    console.dir(user1);
+
+</script>
+</body>
+</html>
