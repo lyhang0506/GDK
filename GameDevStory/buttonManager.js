@@ -1,0 +1,2 @@
+var ButtonManager = Class.extend({
+});

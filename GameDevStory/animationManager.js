@@ -1,0 +1,3 @@
+var AnimationManager = Class.extend({
+
+});
