@@ -1,10 +1,9 @@
-/*
- * @author lyh
- * 日期 14-5-6 下午3:08
- * 功能描述 声音管理类
- * @param {num} 参数1说明
- * @return {num} 返回值说明
- * */
+/**
+ * Created by will.jiang on 14-10-21.
+ * 事件管理
+ * require /library/howler.js
+ */
+
 
 this.GDK = this.GDK || {};
 
@@ -26,9 +25,10 @@ this.GDK = this.GDK || {};
     * @param {object} 声音配置
     * @return none
     * */
-    am._addSounds = function (spriteFile, spriteSetup) {
+    am._addSounds = function (spriteFile, spriteSetup,basePath) {
         am.spriteFile = spriteFile;
         am.spriteSetup = spriteSetup;
+        am.bathPath = basePath;
         for (var i in spriteSetup) {
             var sound = {};
             sound.state = "end";
@@ -44,8 +44,11 @@ this.GDK = this.GDK || {};
     * */
 
      am._loadSounds = function(onload,onloaderror) {
+
+         console.log(am.bathPath);
+         console.log((am.bathPath?(am.bathPath+"/"):"/")+am.spriteFile + '.mp3');
         am.howl = new Howl({
-            urls: [am.spriteFile + '.mp3', am.spriteFile + '.ogg'],
+            urls: [(am.bathPath?(am.bathPath+"/"):"/")+am.spriteFile + '.mp3', (am.bathPath?(am.bathPath+"/"):"/")+am.spriteFile + '.ogg'],
             sprite: am.spriteSetup,
             onload: function () {
                 if(typeof onload =="function"){

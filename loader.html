@@ -8,9 +8,9 @@
 <h2>测试ajax</h2>
 <script src="library/webfont.js"></script>
 <script src="library/howler.js"></script>
-<script src="src/Audio.js"></script>
 <!--GDK资源顺序-->
 <script type="text/javascript" src="src/Core.js"></script>
+<script src="src/Audio.js"></script>
 <script type="text/javascript" src="src/Properties.js"></script>
 <script type="text/javascript" src="src/Event.js"></script>
 <script type="text/javascript" src="src/AssetLoader.js"></script>
@@ -23,11 +23,33 @@
             console.log("加载失败！");
         }
         GDK.on(GDK.EVENT.LOADING_PROGRESS,function(now,count){
+            var c = count;
             console.log("当前加载到第"+now+"个，总共"+count+"个");
         });
         var loader = new GDK.AssetLoader();
-        loader.loadImages(['autoPlayBG.png','autoTimeBG.png','bitmapText.png'],'source/images/desktop/').start(loadSuccess,loadError);
-
+        loader.addImages(['autoPlayBG.png','autoTimeBG.png','bitmapText.png'],'source/images/desktop/');
+        loader.addFonts(["Aldrich regular","Aclonica regular"],"source/font");
+        var basePath = "source/sound/";
+        var spriteFile = "audioSprites";
+        var spriteSetup = {
+            "BGS00": [161, 288,false,false],
+            "BGS01": [ 1389, 697,false,false],
+            "BGS02": [3012, 707,false,false],
+            "BGS03": [4675, 480,false,false],
+            "BGS04": [6100, 363,false,false],
+            "BGS05": [7414, 1137,true,true],
+            "BGS06": [9502, 1036,true,true],
+            "BGS07": [11483, 3179, true,true],
+            "BGS08": [15612, 2668,true,true],
+            "BGS09": [19246, 6666,true,true],
+            "BGS10": [26868, 30057,true,true],
+            "BGS11": [57907, 5271,true,true],
+            "BGS12": [64149, 2906,true,true],
+            "BGS13": [68015, 3947,true,true],
+            "BGS14": [72938, 1925,true,true]
+        }
+        loader.addSounds(spriteFile,spriteSetup,basePath);
+        loader.start(loadSuccess,loadError);
     }());
 </script>
 </body>

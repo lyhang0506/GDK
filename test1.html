@@ -3,21 +3,86 @@
 <head>
     <meta charset="utf-8">
     <title></title>
+    <!--<style type="text/css">
+        @font-face {
+            font-family: "Aldrich regular";
+            src: url('source/font/Aldrich regular.ttf') format("woff");
+        }
+    </style>-->
 </head>
 <body>
+<script src="library/webfont.js"></script>
 <script>
 
-    var count = 0;
-    var m = 3;
-    while (m / 3 >= 1) {
-        var i = Math.floor(m / 3);
-//        m = (m - 3 * i + i);
-        m = m - 2 * i;
-        count += i;
+    window.onload=loadFont;
+
+
+    function loadFont(){
+
+        var styleNode = document.createElement("style");
+        styleNode.type = "text/css";
+        var styletext = "";
+            styletext += "@font-face {\n";
+            styletext += "  font-family: " + "Aclonica regular" + ";\n";
+            styletext += "  src: url('source/font/Aclonica regular.ttf');\n";
+            styletext += "}\n";
+        /*styletext += "@font-face {\n";
+        styletext += "  font-family: " + "Advent Pro 700" + ";\n";
+        styletext += "  src: url('source/font/Advent Pro 700.ttf');\n";
+        styletext += "}\n";*/
+        styletext += "@font-face {\n";
+        styletext += "  font-family: " + "Aldrich regular" + ";\n";
+        styletext += "  src: url('source/font/Aldrich regular.ttf');\n";
+        styletext += "}\n";
+        styleNode.innerHTML = styletext;
+        document.body.appendChild(styleNode);
+        /*var WebFontConfig = {
+                custom: {
+                    families: ["Aldrich regular","Advent Pro 700","Aldrich regular"]
+                },
+
+                //所有字体渲染成功触发此事件，用这个事件判断字体加载完成
+                active: function () {
+                    console.log("所有字体渲染成功");
+                },
+                //如果浏览器不支持连接式加载字体触发此事件或者没有任何字体被加载触发此事件
+                inactive: function () {
+                    console.log("不支持");
+                }
+            };*/
+           /* var tempFamilies = [];
+            for (var i = 0; i < fonts.length; i++) {
+                tempFamilies.push(fonts[i].fontName);
+
+            }*/
+            WebFontConfig = {
+                custom: {
+                    families: ["Aldrich regular","Aclonica regular"]
+                },
+
+                //所有字体渲染成功触发此事件，用这个事件判断字体加载完成
+                active: function () {
+                    console.log("所有字体渲染成功");
+                },
+                //如果浏览器不支持连接式加载字体触发此事件或者没有任何字体被加载触发此事件
+                inactive: function () {
+                    console.log("不支持");
+                },
+
+                //渲染成功一个字体触发一次此事件，用这个事件判断字体加载完成
+                fontactive: function (fontName, fvd) {
+                    console.log(fontName);
+                    console.log(fvd+"--");
+                },
+                //当某一个字体不能被读取时触发此事件
+                fontinactive: function (fontName, fvd) {
+                    console.log(fontName);
+                    console.log(fvd);
+                }
+            };
+
+        WebFont.load(WebFontConfig);
     }
-    console.log('还剩'+m+"元||总共喝了"+count+"瓶");
-   var num =  parseInt("2.95")
-    console.log(num);
 </script>
 </body>
 </html>

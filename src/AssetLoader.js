@@ -54,7 +54,7 @@
      * 功能描述 加载单个图片
      * @param url{String} 参数1说明
      * */
-    loadImage:function(url){
+    addImage:function(url){
         if(url) this.images.push(this.mainPath+url);
         return this;
     },
@@ -65,7 +65,7 @@
      * @param list{arrays} 需要加载的脚本列表
      * @return {num} 返回值说明
      * */
-    loadImages:function(list,basePath){
+    addImages:function(list,basePath){
         //调用加载列表方法。
         this._setLoaderList(list,basePath,this.images);
         return this;
@@ -99,19 +99,29 @@
         * @param {num} 参数1说明
         * @return {num} 返回值说明
         * */
-        addFont: function (fontName) {
-            this.fonts.push(fontName);
+        addFont: function (fontName,basePath) {
+            var font ={
+                basePath:basePath,
+                fontName:fontName
+            };
+            this.fonts.push(font);
             return this;
         },
 
         //根据配置加载多个字体文件 addfonts([yh,aro])
-        addFonts: function (list) {
-            this._setLoaderList(list, "", this.fonts);
+        addFonts: function (list,basePath) {
+            for (var i = 0; i < list.length; i++) {
+               this.fonts.push({
+                   basePath:basePath,
+                   fontName:list[i]
+               })
+            }
             return this;
         },
 
-        addSounds: function (spriteFile, spriteSetup) {
+        addSounds: function (spriteFile, spriteSetup,basePath) {
             this.soundMap=[{
+                basePath:basePath,
                 spriteFile:spriteFile,
                 spriteSetup:spriteSetup
             }];
@@ -205,17 +215,22 @@
             var styletext = "";
             for (var i =0;i<fonts.length;i++) {
                 styletext += "@font-face {\n";
-                styletext += "  font-family: " + fonts[i] + ";\n";
-                styletext += "  src: url('" + self.mainPath+"/font/"+fonts[i] + ".ttf');\n";
+                styletext += "  font-family: " + fonts[i].fontName + ";\n";
+                styletext += "  src: url('" + (fonts[i].basePath?(fonts[i].basePath+"/"):"/")+fonts[i].fontName + ".ttf');\n";
                 styletext += "}\n";
             }
             styleNode.innerHTML = styletext;
             document.body.appendChild(styleNode);
             var WebFontConfig = {};
+            var tempFamilies = [];
+            for (var i = 0; i < fonts.length; i++) {
+                tempFamilies.push(fonts[i].fontName);
+
+            }
             if(fonts.length == 1) {
                 WebFontConfig = {
                     custom: {
-                        families: fonts[0]
+                        families: tempFamilies
                     },
 
                     //所有字体渲染成功触发此事件，用这个事件判断字体加载完成
@@ -229,9 +244,10 @@
                     }
                 };
             }else{
+
                 WebFontConfig = {
                     custom: {
-                        families: fonts
+                        families: tempFamilies
                     },
 
                     //所有字体渲染成功触发此事件，用这个事件判断字体加载完成
@@ -246,7 +262,7 @@
                     //渲染成功一个字体触发一次此事件，用这个事件判断字体加载完成
                     fontactive: function (fontName, fvd) {
                         console.log(fontName);
-                        console.log(fvd);
+                        console.log(fvd+"--");
                         checkCount();
                     },
                     //当某一个字体不能被读取时触发此事件
@@ -263,7 +279,7 @@
         function $loadSounds(soundMap) {
             if(soundMap){
                 GDK.audio = GDK.audio || new GDK.Audio();
-                GDK.audio._addSounds(soundMap.spriteFile, soundMap.spriteSetup);
+                GDK.audio._addSounds(soundMap.spriteFile, soundMap.spriteSetup,soundMap.basePath);
                 GDK.audio._loadSounds(checkCount,_onFail);
             }
         }

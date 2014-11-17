@@ -102,7 +102,7 @@ var ua ;
      * @return {num} 返回值说明
      * */
     function getLanguage(){
-        var lan = win.navigator.language?win.navigator.language:win.navigator.browserLanguage;
+        var lan = window.navigator.language?window.navigator.language:window.navigator.browserLanguage;
         lan = lan.toLowerCase();
         return lan;
     }
@@ -379,7 +379,7 @@ var ua ;
         };
     }
     ua = _ua;
-}(win));
+}(window));
 
 /*
  * author will.jiang
@@ -447,7 +447,7 @@ G.check.getOS = function(){
  * @return {num} 返回值说明
  * */
 G.check.isTouchDevice = function(){
-    return ("createTouch" in win.document);
+    return ("createTouch" in window.document);
 };
 /*
  * author will.jiang

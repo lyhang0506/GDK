@@ -12,28 +12,62 @@
     </div>
 </div>
 </body>
-<script src="src/createjs.js"></script>
-<script src="src/GDK.js"></script>
 <script src="library/webfont.js"></script>
 <script src="library/howler.js"></script>
+<!--GDK资源顺序-->
+<script type="text/javascript" src="src/Core.js"></script>
 <script src="src/Audio.js"></script>
-<script src="src/Font.js"></script>
-<script src="src/Game.js"></script>
+<script type="text/javascript" src="src/Properties.js"></script>
+<script type="text/javascript" src="src/Event.js"></script>
+<script type="text/javascript" src="src/Check.js"></script>
+<script type="text/javascript" src="src/AssetLoader.js"></script>
+<!--游戏客户端js-->
+<script type="text/javascript" src="GameDevStory/createjs.js"></script>
+<script type="text/javascript" src="GameDevStory/TextCreater.js"></script>
+<script type="text/javascript" src="GameDevStory/ButtonCreater.js"></script>
+<script type="text/javascript" src="GameDevStory/Game.js"></script>
+<script type="text/javascript" src="GameDevStory/Class.js"></script>
+<script type="text/javascript" src="GameDevStory/config.js"></script>
+<script type="text/javascript" src="GameDevStory/uiManager.js"></script>
+<script type="text/javascript" src="GameDevStory/animationManager.js"></script>
+<script type="text/javascript" src="GameDevStory/developer.js"></script>
+<script type="text/javascript" src="GameDevStory/loadScene.js"></script>
+<script type="text/javascript" src="GameDevStory/menuScene.js"></script>
+<script type="text/javascript" src="GameDevStory/stage1Scene.js"></script>
+
 <script type="text/javascript">
     window.onload = function() {
-        var game = new GDK.Game();
+        window.game = new Game();
         var deskSettings = {
-            bgHeight:1080,
-            bgWidth:2560,
-            canvasHeight:1080,
-            canvasWidth:1920,
-            gameMinHeight:1000,
-            gameMinWidth:1300,
-            gameBGUrl:"source/images/desktop/background.jpg"
+            bgHeight:960,
+            bgWidth:1920,
+            canvasHeight:960,
+            canvasWidth:960,
+            gameMinHeight:960,
+            gameMinWidth:960,
+            gameBGCss:"#000000"
         };
-        console.log(game);
         game.init(deskSettings);
+        config = new Config();
+        textCreater = new Util.TextCreater();
+        buttonCreater = new Util.ButtonCreater();
+        animationManager = new AnimationManager();
+        startGame();
     }
+    function startGame() {
+        var loadSuccess = function() {
+            game.gotoScene("loadScene");
+            loadScene.preload();
+        };
+        var loadError = function() {
+
+        };
+        var assetLoader = new GDK.AssetLoader();
+        assetLoader.addImage("source/images/desktop/title0.png");
+        assetLoader.addImage("source/images/desktop/kairo.png");
+        assetLoader.start(loadSuccess,loadError);
+    }
+
 
 
 

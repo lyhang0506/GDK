@@ -7,7 +7,7 @@ var G = {
     version: 0.1,
     date: '2014/4/20',
     check: {},//检查的方法类
-    tools: {},//工具类
+    tools: {},//工具类 
     locale: {},//国际化
     audio: null//声音管理类
 };
