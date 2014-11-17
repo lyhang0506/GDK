@@ -30,16 +30,16 @@ var LoadScene = Class.extend({
     tipLayer.addChild(tip);
         game.stage.addChild(tipLayer);
         game.stage.addEventListener("stagemousemove",function(e) {
-        tip.text = "x: "+ parseInt(e.stageX)+" "+"y: "+ parseInt(e.stageY);
+        tip.text = "x: "+ parseInt(e.stageX)/4+" "+"y: "+ parseInt(e.stageY)/4;
         tip.x = e.stageX;
         tip.y = e.stageY;
     })
         game.stage.addEventListener("pressmove", function (e) {
-        e.target.parent.x = parseInt(e.stageX);
-        e.target.parent.y = parseInt(e.stageY);
+        e.target.parent.x = parseInt(e.stageX)/4;
+        e.target.parent.y = parseInt(e.stageY)/4;
         //e.target.x = parseInt(e.stageX);
         //e.target.y = parseInt(e.stageY);
-        tip.text = "x: " + parseInt(e.stageX) + " " + "y: " + parseInt(e.stageY);
+        tip.text = "x: " + parseInt(e.stageX)/4 + " " + "y: " + parseInt(e.stageY)/4;
         tip.x = e.stageX;
         tip.y = e.stageY;
     })
@@ -69,6 +69,9 @@ var LoadScene = Class.extend({
         var imgArr = [];
         for(var i =0;i<26;i++) {
             imgArr.push("body"+i+".png");
+        }
+        for(var i =0;i<36;i++) {
+            imgArr.push("face_"+i+".png");
         }
         imgArr.push("floor0.png");
         imgArr.push("floor1.png");

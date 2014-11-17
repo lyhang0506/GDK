@@ -4,6 +4,7 @@ var Config = Class.extend({
 
     init: function () {
         /*this.bitmaps = this.getBitMaps();*/
+        this.developers = this.getDevelopers();
     },
 
     getTitleSprite:function() {
@@ -171,5 +172,224 @@ var Config = Class.extend({
                 [2, 180, 104, 22]
             ]
         };
+    },
+
+    getDevelopers:function() {
+        return[
+            [{
+                key:"p_1_0",
+                name:"金肛狼",
+                body:7,
+                face:8,
+                power:40,
+                salary:100,
+                job:'Coder',
+                jobs:{
+                    Writer:1,
+                    Coder:1,
+                    Director:1
+                },
+                skills:[40,20,50,20]
+            },
+                {
+                    key:"p_1_1",
+                    name:"钢铁瞎",
+                    body:0,
+                    face:9,
+                    power:70,
+                    salary:500,
+                    job:'Director',
+                    jobs:{
+                        Writer:1,
+                        Coder:1,
+                        Director:1
+                    },
+                    skills:[35,60,50,25]
+                },
+                {
+                    key:"p_1_2",
+                    name:"插教授",
+                    body:10,
+                    face:4,
+                    power:60,
+                    salary:300,
+                    job:'Director',
+                    jobs:{
+                        Writer:4,
+                        Coder:4,
+                        Director:4
+                    },
+                    skills:[60,80,80,88]
+                },
+                {
+                    key:"p_1_3",
+                    name:"绿举人",
+                    body:6,
+                    face:20,
+                    power:70,
+                    salary:200,
+                    job:'Director',
+                    jobs:{
+                        Writer:1,
+                        Coder:3,
+                        Director:2
+                    },
+                    skills:[80,60,10,10]
+                },
+                {
+                    key:"p_1_4",
+                    name:"章鱼boss",
+                    body:14,
+                    face:24,
+                    power:60,
+                    salary:400,
+                    job:'Director',
+                    jobs:{
+                        Writer:1,
+                        Coder:1,
+                        Director:2
+                    },
+                    skills:[80,80,10,78]
+                },
+                {
+                    key:"p_1_5",
+                    name:"曼哈顿boss",
+                    body:5,
+                    face:9,
+                    power:40,
+                    salary:400,
+                    job:'Coder',
+                    jobs:{
+                        Writer:2,
+                        Coder:3,
+                        Director:2
+                    },
+                    skills:[90,98,100,102]
+                }
+            ],
+            [
+                {
+                    key:"p_2_0",
+                    name:"黑寡妇",
+                    body:2,
+                    face:5,
+                    power:60,
+                    salary:500,
+                    job:'Hacker',
+                    jobs:{
+                        'Writer':5,//作家
+                        'Coder':5,//程序
+                        'Comic':5,//原画
+                        'Musician':5,//音乐，
+                        'Director':5,//前面内容5级后出现总监
+                        'Producer':5,//5级后出现 制作人
+                        'HardEng':5,//5级后出现 硬件工程师
+                        'Hacker':1//
+                    },
+                    skills:[250,250,250,250]
+                },
+                {
+                    key:"p_2_1",
+                    name:"霉国队长",
+                    body:3,
+                    face:18,
+                    power:80,
+                    salary:500,
+                    job:'Director',
+                    jobs:{
+                        Write:5,
+                        Coder:3,
+                        Director:2
+                    },
+                    skills:[142,143,98,88]
+                }
+            ],
+            []
+        ]
+    },
+
+   getBody:function(index) {
+       var spriteSheet = new createjs.SpriteSheet(
+           {
+               "images": ["source/images/desktop/body"+index+".png"],
+               "frames": [
+                   [0, 0, 16, 16],
+                   [16, 1, 16, 16],
+                   [32, 1, 16, 16],
+                   [0, 16, 16, 17],
+                   [16, 17, 16, 17],
+                   [32, 17, 16, 17],
+                   [0, 33, 16, 17],
+                   [16, 34, 16, 16],
+                   [32, 34, 16, 16],
+                   [0, 50, 16, 16],
+                   [16, 51, 16, 16],
+                   [32, 51, 16, 16],
+                   [49,0,15,20],
+                   [65,0,15,20],
+                   [81,0,19,21],
+                   [48,21,17,17],
+                   [48,38,17,13],
+                   [48,51,17,14],
+                   [65,20,16,12],
+                   [65,33,16,12],
+                   [65,46,17,13],
+                   [82,21,19,20],
+                   [82,42,20,22]
+                   ],
+               "animations": {
+                   goRight: [0, 2],
+                   goDwon: [3, 5],
+                   goLeft: [6, 8],
+                   goUp: [9, 11],
+                   drink:[11,13,false],
+                   turn1:[14],
+                   turn2:[15],
+                   writeCode1:{
+                       frames:[16,19]
+                   },
+                   writeCode2:{
+                       frames:[17,18]
+                   },
+                   lazy1:[20],
+                   lazy2:[21]
+               }
+           }
+       )
+       var sprite = new createjs.Sprite(spriteSheet);
+       sprite.framerate = 3;
+       return sprite;
+   },
+
+    getFace:function(index) {
+        var spriteSheet = new createjs.SpriteSheet(
+            {
+                "images": ["source/images/desktop/face_"+index+".png"],
+                "frames": [
+                    [3,0,13,14],
+                    [16,0,13,14],
+                    [35,0,13,14],
+                    [48,0,13,14],
+                    [1,15,13,14],
+                    [19,15,13,14],
+                    [34,15,13,14],
+                    [50,15,13,14],
+                    [66,15,13,14]
+                ],
+                "animations": {
+                    left:[0],
+                    down:[1],
+                    up:[2],
+                    right:[3],
+                    laugh:[4],
+                    jump:[5],
+                    faceToFace:[6],
+                    cry:[7],
+                    unHappy:[8]
+                }
+            }
+        )
+        var sprite = new createjs.Sprite(spriteSheet);
+        return sprite;
     }
 });

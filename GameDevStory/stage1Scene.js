@@ -80,6 +80,51 @@ var Stage1Scene = Class.extend({
         this.clerkChair3.y = 109;
         this.object3Layer.addChild(this.clerkChair3);
 
+        var developerConfig;
+        for(var i=0;i<config.developers[0].length;i++) {
+            developerConfig = config.developers[0][i];
+            this[developerConfig.key] = new Developer({
+                name:developerConfig.name,
+                power:developerConfig.power,
+                body:developerConfig.body,
+                face:developerConfig.face,
+                salary:developerConfig.salary,
+                job:developerConfig.job,
+                jobs:developerConfig.jobs,
+                skills:developerConfig.skills
+            })
+        }
+
+        this.p_1_2.mod.x = 152;
+        this.p_1_2.mod.y = 149;
+        this.people2Layer.addChild(this.p_1_2.mod);
+
+        this.p_1_2.walk("right");
+        var self = this;
+        /*createjs.Tween.get(this.p_1_2.mod)
+            .to({x:197,y:125},5000)
+            .call(function() {
+                self.p_1_2.walk("up");
+            })
+            .to({x:169,y:104},3000)
+            .call(function() {
+                self.p_1_2.walk("left");
+            })
+            .to({x:112,y:127},3000)
+            .call(function() {
+                self.p_1_2.walk("up");
+            })
+            .to({x:11,y:69},5000)
+            .call(function() {
+                self.p_1_2.walk("right");
+            })
+            .to({x:45,y:42},5000)
+            .call(function() {
+               self.people2Layer.removeChild(self.p_1_2.mod);
+                self.people0Layer.addChild(self.p_1_2.mod);
+                self.p_1_2.mod.gotoAndStop(17);
+            });*/
         game.sceneLayer.addChild(this.content);
+
     }
 });
