@@ -14,7 +14,7 @@
     * @param {num} 参数1说明
     * @return {num} 返回值说明
     * */
-    var pointer={
+    var points={
         'home':{
             x:144,
             y:174,
@@ -143,7 +143,7 @@
                 1:2
             }
         },
-        'layerChange3': {
+        'layerChange2': {
             x:25,
             y:58,
             'z-index':{
@@ -185,7 +185,7 @@
             'set1': 4,
             'layerChange0':3,
             'layerChange1':3,
-            'layerChange2':2,
+            'layerChange2':2
         };
 
 
@@ -297,12 +297,33 @@
                 }
             }
         }
-        return maps;
+
+        //[[152,149],[197,125],[169,104,{0:1,1:0}]];
+        //对于数据格式需要重新处理下。
+        function packet(maps){
+            var rs = [];
+            for (var i = 0; i < maps.length; i++) {
+                var o = maps[i];
+                var item = [] ;
+                if(points[o]){
+                    item.push(points[o].x,points[o].y,points[o]['z-index']);
+                }else{
+                    item = item.concat(o.split("-"));
+                }
+                rs.push(item);
+            }
+
+            return rs;
+        }
 
 
-    }
+        return packet(maps);
 
-    console.log(autoWalk('173-146', '46-42'));
+    };
+
+
+    console.dir(autoWalk('home', 'layerChange2'));
+
 
 </script>
 </body>
