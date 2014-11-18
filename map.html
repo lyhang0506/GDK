@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>路径简单算法</title>
+</head>
+<body>
+
+<script type="text/javascript">
+    /*
+    * @author will.jiang
+    * 日期 2014 11 18 下午3:38
+    * 功能描述 这里是坐标点对应的坐标点对象。
+    * @param {num} 参数1说明
+    * @return {num} 返回值说明
+    * */
+    var pointer={
+        '1-1':{
+            x:173,
+            y:146,
+            'z-index':{
+                0:2,
+                2:0
+            }
+        }
+    };
+    /*
+     * @author will.jiang
+     * 日期 2014 11 17 下午2:57]
+     *
+     * 功能描述 路径被分割为4个模块。
+     * 为了简化寻找开始和结束点时跨越了多个路径模块
+     * 这样寻路的逻辑就简单的是每个模块之间的路径寻找
+     * @param {【int,int】} 开始坐标点
+     * @param {【int,int】} 结束坐标点
+     * @return {num} 返回值说明
+     * */
+    var autoWalk = function (start, end) {
+        /*
+         * 坐标点需要先进行映射。因为这个不是真正意义上的寻路。需要知道每一个坐标到底是属于哪一个模块的
+         *  k->v  v:坐标属于哪个模块 {【12,33】:1}{【52,34】:2}
+         * */
+        var pointMap = {
+            '173-146': 1,
+            '205-125': 1,
+            '52-87': 2,
+            '6-62': 2,
+            '30-47':2,
+            '46-36': 2,
+            '118-126': 3,
+            '170-103': 3,
+            '198-79': 3,
+            '133-41': 3,
+            '116-50': 3,
+            '80-69': 3,
+            '51-87': 3,
+            '141-91': 4,
+            '124-105': 4,
+            '162-81': 4
+        };
+
+
+        var mapL1 = ['173-146', '205-125', '170-105'],
+                mapL2 = ['52-87', '6-62','30-47', '46-36'],
+                mapL3 = ['118-126', '170-105', '198-79', '133-41', '116-50', '80-69', '52-87'],
+                mapL4 = ['141-91', '124-105', '162-81'];
+
+        /*
+         * @author will.jiang
+         * 日期 2014 11 17 下午3:45
+         * 功能描述 可以从传入的坐标中便利出最段路径列表
+         * @param {num} 开始点
+         * @param {num} 结束点
+         * @param {num} 原数组
+         * @param {num} 是否是环形。默认false。如果是环形就说明可以直接从0-》end
+         * @return {num} 返回值说明
+         * */
+        function link(st, ed, list, annulus) {
+            var sI = list.indexOf(st);
+            var eI = list.indexOf(ed);
+            var needReverse = (sI > eI);
+            var rs;
+            if (needReverse) {
+                //表明需要从后到前
+                rs = list.slice(eI, sI + 1).reverse();
+            } else {
+                rs = list.slice(sI, eI + 1);
+            }
+            //如果是循环的列表
+            if (annulus) {
+                //简单判断下。从开始点直接跳最后坐标的方式是否是最短路径
+                //算法思路是：除去中间开始和结束的内容。用总的内容数减去后就是环形的坐标数。
+                var rs2 = list.length - Math.abs(eI - sI);
+                if (rs.length > rs2) {
+                    if (needReverse) {
+                        rs = list.slice(0, eI + 1).reverse().concat(list.slice(sI).reverse());
+                    } else {
+                        rs = list.slice(0, sI + 1).reverse().concat(list.slice(eI).reverse());
+                    }
+                }
+            }
+            return rs;
+        }
+
+        function change() {
+            var c = start;
+            start = end;
+            end = c;
+            return true;
+        }
+
+        /*
+         * 坐标开始和结束只会有 2->1,3->1,4->1,4-3等,还有逆向的。
+         * 各个区域的连接点需要特别处理下。
+         * 1,3
+         * 3 switch 4,2
+         * [1,3,[4,2]]
+         * */
+        var k = pointMap[start] + "-" + pointMap[end];
+
+        var maps = [];
+        var t;
+        //1、3之间的连接点
+        var p1 = mapL1[mapL1.length - 1];
+        //3、2之间的连接点
+        var p2 = mapL3[mapL3.length - 1];
+        //3、4之间的连接点
+        var p4 = mapL4[1];
+        switch (k) {
+            case '2-1':
+                t = change();
+            case '1-2':
+                maps = maps.concat(link(start, p1, mapL1), link(p1, p2, mapL3, true), link(p2, end, mapL2));
+                break;
+            case '3-3':
+                maps = maps.concat(link(start, end, mapL3, true));
+                break;
+            case '4-3':
+                t = change();
+            case '3-4':
+                maps = maps.concat(link(start, p1, mapL3, true), link(p4, end,mapL4));
+                break;
+            case '3-1':
+                t = change();
+            case '1-3':
+                maps = maps.concat(link(start, p1, mapL1), link(p1, end, mapL3, true));
+                break;
+            case '4-1':
+                t = change();
+            case '1-4':
+                maps = maps.concat(link(start, p1, mapL1), link(p4, end, mapL4));
+                break;
+        }
+
+        if (t) {
+            maps = maps.reverse();
+        }
+        if (maps.length) {
+            //大于0的情况下。由于上面设置连接点的时候，相交点会多计算一次。因此去下重复
+
+
+            for (var i = 1, max = maps.length; i < max; i++) {
+
+                if (maps[i] == maps[i - 1]) {
+                    //重复了，去除一个
+                    maps.splice(i, 1);
+                    max--;
+                }
+            }
+        }
+        return maps;
+
+
+    }
+
+    console.log(autoWalk('173-146', '46-42'));
+
+</script>
+</body>
+</html>
